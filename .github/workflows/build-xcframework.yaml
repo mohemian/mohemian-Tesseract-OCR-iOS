@@ -1,0 +1,62 @@
+name: Build XCFramework
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build for Simulator (x86_64 only)
+        run: |
+          xcodebuild \
+            -project "Tesseract OCR iOS.xcodeproj" \
+            -scheme TesseractOCR \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -archivePath build/Simulator.xcarchive \
+            archive SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+            ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO
+
+      - name: Build for Device (arm64)
+        run: |
+          xcodebuild \
+            -project "Tesseract OCR iOS.xcodeproj" \
+            -scheme TesseractOCR \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/Device.xcarchive \
+            archive SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+            ARCHS=arm64 ONLY_ACTIVE_ARCH=NO
+
+      - name: Create XCFramework (x86_64 + arm64)
+        run: |
+          DEVICE_DIR="build/Device.xcarchive/Products/Library/Frameworks/TesseractOCR.framework"
+          SIMULATOR_DIR="build/Simulator.xcarchive/Products/Library/Frameworks/TesseractOCR.framework"
+          OUTPUT_DIR="build/TesseractOCR.xcframework"
+
+          xcodebuild -create-xcframework \
+            -framework "$DEVICE_DIR" \
+            -framework "$SIMULATOR_DIR" \
+            -output "$OUTPUT_DIR"
+
+      - name: Zip XCFramework
+        run: |
+          cd build
+          zip -r TesseractOCR.xcframework.zip TesseractOCR.xcframework
+          cd ..
+
+      - name: Upload XCFramework ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: TesseractOCR.xcframework.zip
+          path: build/TesseractOCR.xcframework.zip
