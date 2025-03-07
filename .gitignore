@@ -76,3 +76,9 @@ tesseract-*
 *.gcno
 
 .DS_Store
+
+TesseractOCR/build
+TesseractOCR/install
+TesseractOCR/jpeg-*
+TesseractOCR/tiff-*
+TesseractOCR/libpng-*
