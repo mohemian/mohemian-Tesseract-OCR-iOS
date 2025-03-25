@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F43AD052D92E45C00E979AF /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F43AD042D92E45C00E979AF /* TesseractOCR.framework */; };
+		3F43AD062D92E45C00E979AF /* TesseractOCR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F43AD042D92E45C00E979AF /* TesseractOCR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F9A489F12037776A00887BDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A489F02037776A00887BDC /* AppDelegate.swift */; };
 		F9A489F32037776A00887BDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A489F22037776A00887BDC /* ViewController.swift */; };
 		F9A489F62037776A00887BDC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9A489F42037776A00887BDC /* Main.storyboard */; };
@@ -16,7 +18,22 @@
 		F9A48A18203781AE00887BDC /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = F9A48A17203781AD00887BDC /* tessdata */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3F43AD072D92E45C00E979AF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3F43AD062D92E45C00E979AF /* TesseractOCR.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3F43AD042D92E45C00E979AF /* TesseractOCR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A489ED2037776A00887BDC /* Example Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A489F02037776A00887BDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9A489F22037776A00887BDC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -33,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F43AD052D92E45C00E979AF /* TesseractOCR.framework in Frameworks */,
 				F9A48A032037779E00887BDC /* TesseractOCR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,12 +58,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F43AD032D92E45C00E979AF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3F43AD042D92E45C00E979AF /* TesseractOCR.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F9A489E42037776A00887BDC = {
 			isa = PBXGroup;
 			children = (
 				F9A489EF2037776A00887BDC /* Example Swift */,
 				F9A489EE2037776A00887BDC /* Products */,
 				F9A48A022037779E00887BDC /* TesseractOCR.framework */,
+				3F43AD032D92E45C00E979AF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,6 +108,7 @@
 				F9A489E92037776A00887BDC /* Sources */,
 				F9A489EA2037776A00887BDC /* Frameworks */,
 				F9A489EB2037776A00887BDC /* Resources */,
+				3F43AD072D92E45C00E979AF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -295,13 +323,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 44R9293238;
+				DEVELOPMENT_TEAM = 6NAG2Z2T57;
 				INFOPLIST_FILE = "Example Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.g8production.Template-Framework-Project.Example-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.g8production.Template-Test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -313,13 +341,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 44R9293238;
+				DEVELOPMENT_TEAM = 6NAG2Z2T57;
 				INFOPLIST_FILE = "Example Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.g8production.Template-Framework-Project.Example-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.g8production.Template-Test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
