@@ -94,5 +94,5 @@ tesseract-*
 TesseractOCR/build
 TesseractOCR/install
 TesseractOCR/jpeg-*
-TesseractOCR/tiff-*
+TesseractOCR/libtiff-*
 TesseractOCR/libpng-*

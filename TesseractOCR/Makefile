@@ -21,12 +21,14 @@ JPEG_SRC = $(TESSERACT_ROOT)/$(JPEG_DIR_NAME)
 JPEG_BUILD_DIR = $(BUILD_DIR)/jpeg
 JPEG_INSTALL_DIR = $(INSTALL_DIR)/jpeg
 
-PNG_NAME = libpng-1.6.44
+PNG_VERSION = 1.6.47
+PNG_NAME = libpng-$(PNG_VERSION)
 PNG_SRC = $(TESSERACT_ROOT)/$(PNG_NAME)
 PNG_BUILD_DIR = $(BUILD_DIR)/png
 PNG_INSTALL_DIR = $(INSTALL_DIR)/png
 
-TIFF_NAME = tiff-4.7.0
+TIFF_VERSION = 4.7.0
+TIFF_NAME = libtiff-v$(TIFF_VERSION)
 TIFF_SRC = $(TESSERACT_ROOT)/$(TIFF_NAME)
 TIFF_BUILD_DIR = $(BUILD_DIR)/tiff
 TIFF_INSTALL_DIR = $(INSTALL_DIR)/tiff
@@ -37,7 +39,7 @@ LEPTON_SRC = $(TESSERACT_ROOT)/$(LEPTON_NAME)
 LEPT_BUILD_DIR = $(BUILD_DIR)/leptonica
 LEPT_INSTALL_DIR = $(INSTALL_DIR)/leptonica
 
-TESSERACT_VERSION = 5.4.1
+TESSERACT_VERSION = 5.5.0
 TESSERACT_NAME = tesseract-$(TESSERACT_VERSION)
 TESSERACT_SRC = $(TESSERACT_ROOT)/$(TESSERACT_NAME)
 TESS_BUILD_DIR = $(BUILD_DIR)/tesseract
@@ -173,7 +175,7 @@ png: clean-png $(PNG_SRC)/configure
 	@echo "Successfully built png!"
 
 $(PNG_SRC)/configure:
-	curl -L https://download.sourceforge.net/libpng/$(PNG_NAME).tar.gz | tar -xpf-
+	curl -L	https://github.com/pnggroup/libpng/archive/refs/tags/v$(PNG_VERSION).tar.gz | tar -xpf-
 
 # TIFF target
 tiff: clean-tiff jpeg $(TIFF_SRC)/configure
@@ -219,7 +221,7 @@ tiff: clean-tiff jpeg $(TIFF_SRC)/configure
 	@echo "Successfully built tiff!"
 
 $(TIFF_SRC)/configure:
-	curl -L https://download.osgeo.org/libtiff/$(TIFF_NAME).tar.gz | tar -xpf-
+	curl -L https://gitlab.com/libtiff/libtiff/-/archive/v$(TIFF_VERSION)/libtiff-v$(TIFF_VERSION).tar.gz | tar -xpf-
 
 # Leptonica target
 leptonica: clean-leptonica jpeg png tiff $(LEPTON_SRC)/configure
