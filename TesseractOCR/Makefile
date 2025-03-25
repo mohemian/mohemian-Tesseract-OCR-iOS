@@ -37,7 +37,7 @@ LEPTON_SRC = $(TESSERACT_ROOT)/$(LEPTON_NAME)
 LEPT_BUILD_DIR = $(BUILD_DIR)/leptonica
 LEPT_INSTALL_DIR = $(INSTALL_DIR)/leptonica
 
-TESSERACT_VERSION = 5.5.0
+TESSERACT_VERSION = 5.4.1
 TESSERACT_NAME = tesseract-$(TESSERACT_VERSION)
 TESSERACT_SRC = $(TESSERACT_ROOT)/$(TESSERACT_NAME)
 TESS_BUILD_DIR = $(BUILD_DIR)/tesseract
@@ -282,10 +282,10 @@ tesseract: clean-tesseract $(TESSERACT_SRC)/configure autogen-tesseract leptonic
 		$(COMMON_EXPORTS); \
 		if [[ "$$arch" == *simulator* ]]; then \
 			$(SIMULATOR_FLAGS); \
-			export INSTALL_DIR=$(TESS_BUILD_DIR)/$$arch; \
+			export INSTALL_DIR=$(TESS_INSTALL_DIR)/simulator; \
 		else \
 			$(DEVICE_FLAGS); \
-			export INSTALL_DIR=$(TESS_BUILD_DIR)/$$arch; \
+			export INSTALL_DIR=$(TESS_INSTALL_DIR)/ios; \
 		fi; \
 		export LIBS="$$PNG_LIBS $$JPEG_LIBS $$TIFF_LIBS -lz"; \
 		export CPPFLAGS="$$CFLAGS $$LEPTONICA_CFLAGS $$PNG_CFLAGS $$JPEG_CFLAGS $$TIFF_CFLAGS"; \
@@ -302,26 +302,16 @@ tesseract: clean-tesseract $(TESSERACT_SRC)/configure autogen-tesseract leptonic
 			--disable-openmp \
 			--with-pic \
 			LEPTONICA_LIBS="$$LEPTONICA_LIBS" \
-			LEPTONICA_CFLAGS="$$LEPTONICA_CFLAGS" \
-            CPPFLAGS="$$CPPFLAGS" \
-            CXXFLAGS="$$CXXFLAGS" \
-            LDFLAGS="$$LDFLAGS" || exit 1; \
+			LEPTONICA_CFLAGS="$$LEPTONICA_CFLAGS" || exit 1; \
 		echo "Building Tesseract for $$arch"; \
 		$(MAKE) -j8 && $(MAKE) install || exit 1; \
 	done
 	@echo "Creating Tesseract simulator universal binary"
-	@mkdir -p $(TESS_INSTALL_DIR)/simulator/lib $(TESS_INSTALL_DIR)/ios/lib
-	@mkdir -p $(TESS_INSTALL_DIR)/ios/include $(TESS_INSTALL_DIR)/simulator/include
 	@xcrun lipo -create \
-		$(TESS_BUILD_DIR)/arm64-simulator/lib/libtesseract.a \
-		$(TESS_BUILD_DIR)/x86_64-simulator/lib/libtesseract.a \
+		$(TESS_BUILD_DIR)/arm64-simulator/.libs/libtesseract.a \
+		$(TESS_BUILD_DIR)/x86_64-simulator/.libs/libtesseract.a \
 		-output $(TESS_INSTALL_DIR)/simulator/lib/libtesseract.a
-	@cp $(TESS_BUILD_DIR)/arm64/lib/libtesseract.a $(TESS_INSTALL_DIR)/ios/lib/
-	@cp -R $(TESS_BUILD_DIR)/arm64/include/* $(TESS_INSTALL_DIR)/ios/include/
-	@cp -R $(TESS_BUILD_DIR)/x86_64-simulator/include/* $(TESS_INSTALL_DIR)/simulator/include/
 	@echo "Successfully built Tesseract!"
-
-
 
 $(TESSERACT_SRC)/configure:
 	curl -L https://github.com/tesseract-ocr/tesseract/archive/refs/tags/$(TESSERACT_VERSION).tar.gz | tar -xpf-
