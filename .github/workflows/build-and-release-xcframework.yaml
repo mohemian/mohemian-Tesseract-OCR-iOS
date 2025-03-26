@@ -23,6 +23,9 @@ jobs:
       - name: Install autogen
         run: brew install autogen
 
+      - name: Install automake (for aclocal)
+        run: brew install automake
+
       - name: Get Tag Info
         id: taginfo
         run: |
