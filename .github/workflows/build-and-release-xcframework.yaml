@@ -20,6 +20,9 @@ jobs:
       - name: Install libtool
         run: brew install libtool
 
+      - name: Install autogen
+        run: brew install autogen
+
       - name: Get Tag Info
         id: taginfo
         run: |
