@@ -23,14 +23,14 @@ jobs:
       - name: Install autogen
         run: brew install autogen
 
-      - name: Install automake (for aclocal)
+      - name: Install automake
         run: brew install automake
 
       - name: Get Tag Info
         id: taginfo
         run: |
           if [[ "${{ github.event_name }}" == "push" ]]; then
-            DATE=$(date +"%d-%m-%Y")
+            DATE=$(date +"%Y-%m-%d")
             TIMESTAMP=$(date +%s)
             TAG="$DATE-$TIMESTAMP"
             echo "TAG=$TAG" >> $GITHUB_ENV
@@ -76,6 +76,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./YourLibrary.xcframework.zip
-          asset_name: YourLibrary.xcframework.zip
+          asset_path: ./xcframework/TesseractOCR.xcframework.xcframework.zip
+          asset_name: TesseractOCR.xcframework.zip
           asset_content_type: application/zip
