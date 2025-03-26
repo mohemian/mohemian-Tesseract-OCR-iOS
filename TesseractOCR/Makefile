@@ -21,22 +21,26 @@ JPEG_SRC = $(TESSERACT_ROOT)/$(JPEG_DIR_NAME)
 JPEG_BUILD_DIR = $(BUILD_DIR)/jpeg
 JPEG_INSTALL_DIR = $(INSTALL_DIR)/jpeg
 
-PNG_NAME = libpng-1.6.44
+PNG_VERSION = 1.6.47
+PNG_NAME = libpng-$(PNG_VERSION)
 PNG_SRC = $(TESSERACT_ROOT)/$(PNG_NAME)
 PNG_BUILD_DIR = $(BUILD_DIR)/png
 PNG_INSTALL_DIR = $(INSTALL_DIR)/png
 
-TIFF_NAME = tiff-4.7.0
+TIFF_VERSION = 4.7.0
+TIFF_NAME = tiff-$(TIFF_VERSION)
 TIFF_SRC = $(TESSERACT_ROOT)/$(TIFF_NAME)
 TIFF_BUILD_DIR = $(BUILD_DIR)/tiff
 TIFF_INSTALL_DIR = $(INSTALL_DIR)/tiff
 
-LEPTON_NAME = leptonica
+LEPTON_VERSION = 1.85.0
+LEPTON_NAME = leptonica-$(LEPTON_VERSION)
 LEPTON_SRC = $(TESSERACT_ROOT)/$(LEPTON_NAME)
 LEPT_BUILD_DIR = $(BUILD_DIR)/leptonica
 LEPT_INSTALL_DIR = $(INSTALL_DIR)/leptonica
 
-TESSERACT_NAME = tesseract-ocr
+TESSERACT_VERSION = 5.5.0
+TESSERACT_NAME = tesseract-$(TESSERACT_VERSION)
 TESSERACT_SRC = $(TESSERACT_ROOT)/$(TESSERACT_NAME)
 TESS_BUILD_DIR = $(BUILD_DIR)/tesseract
 TESS_INSTALL_DIR = $(INSTALL_DIR)/tesseract
@@ -171,7 +175,7 @@ png: clean-png $(PNG_SRC)/configure
 	@echo "Successfully built png!"
 
 $(PNG_SRC)/configure:
-	curl -L https://download.sourceforge.net/libpng/$(PNG_NAME).tar.gz | tar -xpf-
+	curl -L	https://github.com/pnggroup/libpng/archive/refs/tags/v$(PNG_VERSION).tar.gz | tar -xpf-
 
 # TIFF target
 tiff: clean-tiff jpeg $(TIFF_SRC)/configure
@@ -220,7 +224,7 @@ $(TIFF_SRC)/configure:
 	curl -L https://download.osgeo.org/libtiff/$(TIFF_NAME).tar.gz | tar -xpf-
 
 # Leptonica target
-leptonica: clean-leptonica jpeg png tiff
+leptonica: clean-leptonica jpeg png tiff $(LEPTON_SRC)/configure
 	@echo "Building Leptonica for architectures: $(ARCHS)"
 	@for arch in $(ARCHS); do \
 		echo "Building Leptonica for $$arch"; \
@@ -260,6 +264,10 @@ leptonica: clean-leptonica jpeg png tiff
 		-output $(LEPT_INSTALL_DIR)/simulator/lib/libleptonica.a
 	@echo "Successfully built Leptonica!"
 
+$(LEPTON_SRC)/configure:
+	curl -L https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTON_VERSION)/$(LEPTON_NAME).tar.gz | tar -xpf-
+
+
 # Tesseract targets
 autogen-tesseract:
 	@cd $(TESSERACT_SRC) && \
@@ -267,7 +275,7 @@ autogen-tesseract:
 		./autogen.sh; \
 	fi
 
-tesseract: clean-tesseract autogen-tesseract leptonica
+tesseract: clean-tesseract $(TESSERACT_SRC)/configure autogen-tesseract leptonica
 	@echo "Building Tesseract for architectures: $(ARCHS)"
 	@for arch in $(ARCHS); do \
 		echo "Building Tesseract for $$arch"; \
@@ -276,16 +284,15 @@ tesseract: clean-tesseract autogen-tesseract leptonica
 		$(COMMON_EXPORTS); \
 		if [[ "$$arch" == *simulator* ]]; then \
 			$(SIMULATOR_FLAGS); \
-			export INSTALL_DIR=$(TESS_BUILD_DIR)/$$arch; \
+			export INSTALL_DIR=$(TESS_INSTALL_DIR)/simulator; \
 		else \
 			$(DEVICE_FLAGS); \
-			export INSTALL_DIR=$(TESS_BUILD_DIR)/$$arch; \
+			export INSTALL_DIR=$(TESS_INSTALL_DIR)/ios; \
 		fi; \
 		export LIBS="$$PNG_LIBS $$JPEG_LIBS $$TIFF_LIBS -lz"; \
 		export CPPFLAGS="$$CFLAGS $$LEPTONICA_CFLAGS $$PNG_CFLAGS $$JPEG_CFLAGS $$TIFF_CFLAGS"; \
 		export CXXFLAGS="$$CFLAGS $$LEPTONICA_CFLAGS $$PNG_CFLAGS $$JPEG_CFLAGS $$TIFF_CFLAGS"; \
 		export LDFLAGS="$$LDFLAGS $$LEPTONICA_LIBS $$PNG_LIBS $$JPEG_LIBS $$TIFF_LIBS -lz"; \
-		cd $(TESSERACT_SRC) && $(MAKE) distclean; \
 		cd $(TESS_BUILD_DIR)/$$arch; \
 		echo "Configuring Tesseract for $$arch with host $$HOST"; \
 		$(TESSERACT_SRC)/configure \
@@ -302,22 +309,22 @@ tesseract: clean-tesseract autogen-tesseract leptonica
 		$(MAKE) -j8 && $(MAKE) install || exit 1; \
 	done
 	@echo "Creating Tesseract simulator universal binary"
-	@mkdir -p $(TESS_INSTALL_DIR)/simulator/lib $(TESS_INSTALL_DIR)/ios/lib
-	@mkdir -p $(TESS_INSTALL_DIR)/ios/include $(TESS_INSTALL_DIR)/simulator/include
 	@xcrun lipo -create \
-		$(TESS_BUILD_DIR)/arm64-simulator/lib/libtesseract.a \
-		$(TESS_BUILD_DIR)/x86_64-simulator/lib/libtesseract.a \
+		$(TESS_BUILD_DIR)/arm64-simulator/.libs/libtesseract.a \
+		$(TESS_BUILD_DIR)/x86_64-simulator/.libs/libtesseract.a \
 		-output $(TESS_INSTALL_DIR)/simulator/lib/libtesseract.a
-	@cp $(TESS_BUILD_DIR)/arm64/lib/libtesseract.a $(TESS_INSTALL_DIR)/ios/lib/
-	@cp -R $(TESS_BUILD_DIR)/arm64/include/* $(TESS_INSTALL_DIR)/ios/include/
-	@cp -R $(TESS_BUILD_DIR)/x86_64-simulator/include/* $(TESS_INSTALL_DIR)/simulator/include/
 	@echo "Successfully built Tesseract!"
+
+$(TESSERACT_SRC)/configure:
+	curl -L https://github.com/tesseract-ocr/tesseract/archive/refs/tags/$(TESSERACT_VERSION).tar.gz | tar -xpf-
+
+
 
 # TesseractOCR framework target
 tesseract-ocr-archives:
 	@echo "Building TesseractOCR archives..."
 	@mkdir -p $(ARCHIVES_DIR)
-	
+
 	@echo "Building iOS archive..."
 	xcodebuild archive \
 		-workspace $(WORKSPACE) \
@@ -326,7 +333,7 @@ tesseract-ocr-archives:
 		-archivePath $(ARCHIVES_DIR)/ios.xcarchive \
 		SKIP_INSTALL=NO \
 		BUILD_LIBRARY_FOR_DISTRIBUTION=YES
-	
+
 	@echo "Building iOS Simulator archive..."
 	xcodebuild archive \
 		-workspace $(WORKSPACE) \
@@ -335,7 +342,7 @@ tesseract-ocr-archives:
 		-archivePath $(ARCHIVES_DIR)/ios-simulator.xcarchive \
 		SKIP_INSTALL=NO \
 		BUILD_LIBRARY_FOR_DISTRIBUTION=YES
-	
+
 	@echo "Successfully created archives!"
 
 # XCFramework creation
@@ -372,12 +379,12 @@ tesseract-ocr-xcframework: tesseract-ocr-archives
 	@echo "Creating TesseractOCR.xcframework..."
 	@mkdir -p $(FRAMEWORK_DIR)
 	@rm -rf $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME).xcframework
-	
+
 	xcodebuild -create-xcframework \
 		-framework $(ARCHIVES_DIR)/ios.xcarchive/Products/Library/Frameworks/$(FRAMEWORK_NAME).framework \
 		-framework $(ARCHIVES_DIR)/ios-simulator.xcarchive/Products/Library/Frameworks/$(FRAMEWORK_NAME).framework \
 		-output $(FRAMEWORK_DIR)/$(FRAMEWORK_NAME).xcframework
-	
+
 	@echo "Successfully created $(FRAMEWORK_NAME).xcframework!"
 
 # Clean targets
