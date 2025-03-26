@@ -28,7 +28,7 @@ PNG_BUILD_DIR = $(BUILD_DIR)/png
 PNG_INSTALL_DIR = $(INSTALL_DIR)/png
 
 TIFF_VERSION = 4.7.0
-TIFF_NAME = libtiff-v$(TIFF_VERSION)
+TIFF_NAME = tiff-$(TIFF_VERSION)
 TIFF_SRC = $(TESSERACT_ROOT)/$(TIFF_NAME)
 TIFF_BUILD_DIR = $(BUILD_DIR)/tiff
 TIFF_INSTALL_DIR = $(INSTALL_DIR)/tiff
@@ -221,7 +221,7 @@ tiff: clean-tiff jpeg $(TIFF_SRC)/configure
 	@echo "Successfully built tiff!"
 
 $(TIFF_SRC)/configure:
-	curl -L https://gitlab.com/libtiff/libtiff/-/archive/v$(TIFF_VERSION)/libtiff-v$(TIFF_VERSION).tar.gz | tar -xpf-
+	curl -L https://download.osgeo.org/libtiff/$(TIFF_NAME).tar.gz | tar -xpf-
 
 # Leptonica target
 leptonica: clean-leptonica jpeg png tiff $(LEPTON_SRC)/configure
