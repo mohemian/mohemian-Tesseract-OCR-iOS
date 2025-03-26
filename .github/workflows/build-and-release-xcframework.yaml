@@ -1,6 +1,9 @@
 name: Build and Release XCFramework
 
 on:
+  push:
+    branches:
+      - tess_5 # TODO REPLACE
   workflow_dispatch:  # Manual trigger
 
 jobs:
