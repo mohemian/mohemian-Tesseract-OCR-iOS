@@ -1,6 +1,9 @@
 name: Build and Release XCFramework
 
 on:
+  push:
+    branches:
+      - tess_5
   workflow_dispatch:
 
 jobs:
